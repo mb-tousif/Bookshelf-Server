@@ -36,7 +36,6 @@ const bookSchema = new Schema<TBook>(
           },
           comment: {
             type: String,
-            default: "No comment added",
           },
         },
       ],
@@ -48,22 +47,6 @@ const bookSchema = new Schema<TBook>(
     description: {
       type: String,
       default: "No description Added",
-    },
-    wishList: {
-      type: [
-        {
-          user: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-          },
-          status: {
-            type: String,
-            enum: ["Currently Reading", "Finish Reading", "Read in future"],
-            default: "Read in future",
-          },
-        },
-      ],
     },
   },
   {

@@ -7,14 +7,15 @@ export type TBook = {
   genre: string;
   publicationYear: number;
   savedBy: Schema.Types.ObjectId;
-  reviews?: {
+  reviews: {
     user: Schema.Types.ObjectId;
     comment: string;
   }[];
   imgUrl?: string;
   description?: string;
-  wishList?: {
-    user: Schema.Types.ObjectId;
-    status: string;
-  }[];
 };
+
+export type TReview= {
+  user: string;
+  comment: string;
+}
