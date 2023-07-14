@@ -25,3 +25,11 @@ export const createBookService = async (book: TBook) => {
     }
     return newBook;
 }
+
+export const getAllBooksService = async () => {
+    const books = await Book.find().limit(10).sort({ createdAt: -1 })
+    if (!books) {
+        throw new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Books not found 💥")
+    }
+    return books;
+}

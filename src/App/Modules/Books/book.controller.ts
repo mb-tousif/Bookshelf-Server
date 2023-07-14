@@ -5,7 +5,7 @@ import AsyncHandler from "../../../Shared/AsyncHandler";
 import { verifyToken } from "../../../Shared/JwtHandler";
 import ResponseHandler from "../../../Shared/ResponseHandler";
 import { TBook } from "./book.interfaces";
-import { createBookService } from "./book.services";
+import { createBookService, getAllBooksService } from "./book.services";
 
 
 export const createBook = AsyncHandler(async (req, res, next) => {
@@ -25,6 +25,16 @@ export const createBook = AsyncHandler(async (req, res, next) => {
         statusCode: 201,
         success: true,
         message: "Book created successfully 🎉",
+        data: result,
+    })
+})
+
+export const getAllBooks = AsyncHandler(async (req, res, next) => {
+    const result = await getAllBooksService();
+    ResponseHandler<TBook[]>(res, {
+        statusCode: 200,
+        success: true,
+        message: "Books fetched successfully 🎉",
         data: result,
     })
 })
