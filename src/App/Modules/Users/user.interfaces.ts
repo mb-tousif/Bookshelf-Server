@@ -1,9 +1,11 @@
-import { Model } from "mongoose";
+import { Model, Schema } from "mongoose";
 
 export type TUser = {
   id: string;
   email: string;
   password: string;
+  address?: string;
+  books?: Schema.Types.ObjectId[];
 };
 
 export type TLoginInfo = {
@@ -12,6 +14,7 @@ export type TLoginInfo = {
   };
   
   export type TLoginResponse = {
+    id: Schema.Types.ObjectId;
     accessToken: string;
   };
 

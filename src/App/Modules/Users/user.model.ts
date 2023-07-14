@@ -6,7 +6,6 @@ import Config from "../../../Config";
 const userSchema = new Schema<TUser>({
   id: {
     type: String,
-    unique: true,
   },
   email: {
     type: String,
@@ -17,6 +16,16 @@ const userSchema = new Schema<TUser>({
     type: String,
     required: true,
   },
+  address: {
+    type: String,
+    default: "No address added",
+  },
+  books: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Book",
+    },
+  ],
 },
 {
   timestamps: true,

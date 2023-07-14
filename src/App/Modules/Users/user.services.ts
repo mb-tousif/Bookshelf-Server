@@ -9,39 +9,47 @@ import { Secret } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export const createUserService = async (userInfo: TUser) => {
-    const result = await User.create(userInfo);
-    const data = await User.findOne({ _id: result._id }).select("-password");
-    return data;
+  const result = await User.create(userInfo);
+  const data = await User.findOne({ _id: result._id }).select("-password");
+  return data;
+};
+
+export const loginService = async (loginInfo: TLoginInfo) => {
+  const result = await User.findOne({ email: loginInfo.email });
+  if (!result) {
+    new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "User not Found 💥");
+  }
+  const matchPassword = await User.isPasswordMatched(
+    loginInfo.password,
+    result?.password as string
+  );
+
+  if (!matchPassword) {
+    new ApiErrorHandler(
+      false,
+      httpStatus.BAD_REQUEST,
+      "Password not matched 💥"
+    );
+  }
+  const { _id, email } = result as any;
+  const accessToken = generateToken(
+    { _id, email },
+    Config.jwt.secret as Secret,
+    Config.jwt.expiresIn as string
+  );
+  const data = {
+    id: _id,
+    accessToken,
   };
-  
-  export const loginService = async (loginInfo: TLoginInfo) => {
-      const result = await User.findOne({ email: loginInfo.email });
-      if (!result) {
-        new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "User not Found 💥")
-      }
-      const matchPassword = await User.isPasswordMatched(loginInfo.password, result?.password as string);
-      
-      if (!matchPassword) {
-        new ApiErrorHandler(
-          false,
-          httpStatus.BAD_REQUEST,
-          "Password not matched 💥"
-          )
-          }
-      const { _id, email } = result as any;
-      const accessToken = generateToken( { _id, email }, Config.jwt.secret as Secret, Config.jwt.expiresIn as string );
-      const data = {
-        accessToken
-      };
-      return data;
-    };
+  return data;
+};
 
 export const updateUserByTokenService = async (
   token: string,
   userInfo: Partial<TUser>
 ) => {
- const decodedToken = getUserInfoFromToken(token);
-    const { _id } = decodedToken;
+  const decodedToken = getUserInfoFromToken(token);
+  const { _id } = decodedToken;
   const user = await User.findOne({ _id });
   if (!user) {
     throw new ApiErrorHandler(false, httpStatus.NOT_FOUND, "User not found 💥");

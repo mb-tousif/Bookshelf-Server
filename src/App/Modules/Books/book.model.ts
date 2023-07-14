@@ -9,22 +9,16 @@ const bookSchema = new Schema<TBook>(
     },
     title: {
       type: String,
-      required: [true, "Title is required"],
+      required: [true, "Book name is required"],
+      unique: true,
     },
     author: {
         type: String,
         required: [true, "Author is required"],
     },
-    imgUrl: {
+    genre: {
         type: String,
-        default: "https://via.placeholder.com/350",
-    },
-    description: {
-      type: String,
-      default: "No description Added",
-    },
-    publicationDate: {
-      type: String,
+        required: [true, "Genre is required"],
     },
     publicationYear: {
       type: Number,
@@ -44,6 +38,30 @@ const bookSchema = new Schema<TBook>(
         },
       ],
       required: true,
+    },
+    imgUrl: {
+        type: String,
+        default: "https://via.placeholder.com/300",
+    },
+    description: {
+      type: String,
+      default: "No description Added",
+    },
+    wishList: {
+      type: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+          },
+          status: {
+            type: String,
+            enum: ["Currently Reading", "Finish Reading", "Read in future"],
+            default: "Read in future",
+          },
+        },
+      ],
     },
   },
   {
