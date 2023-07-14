@@ -6,7 +6,8 @@ export type TBook = {
   author: string;
   genre: string;
   publicationYear: number;
-  reviews: {
+  savedBy: Schema.Types.ObjectId;
+  reviews?: {
     user: Schema.Types.ObjectId;
     comment: string;
   }[];

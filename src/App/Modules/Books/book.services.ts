@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import { User } from "../Users/user.model";
 
 export const createBookService = async (book: TBook) => {
-    const user = book.reviews[0].user;
+    const user = book.savedBy;
     const newBook = (await Book.create(book));
     const session = await mongoose.startSession();
       try {

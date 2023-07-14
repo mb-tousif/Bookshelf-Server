@@ -5,7 +5,6 @@ const bookSchema = new Schema<TBook>(
   {
     id: {
       type: String,
-      unique: true,
     },
     title: {
       type: String,
@@ -23,13 +22,17 @@ const bookSchema = new Schema<TBook>(
     publicationYear: {
       type: Number,
     },
+    savedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     reviews: {
       type: [
         {
           user: {
             type: Schema.Types.ObjectId,
             ref: "User",
-            required: true,
           },
           comment: {
             type: String,
@@ -37,7 +40,6 @@ const bookSchema = new Schema<TBook>(
           },
         },
       ],
-      required: true,
     },
     imgUrl: {
         type: String,
