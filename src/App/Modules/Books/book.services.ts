@@ -37,8 +37,8 @@ export const getTenBooksService = async () => {
 }
 
 export const getAllBooksService = async (
-  paginationOptions: IPagination,
-  searchQuery: TSearchedBook
+  searchQuery: TSearchedBook,
+  paginationOptions: IPagination
 ): Promise<IQueryResponse<TBook[]>> => { 
   const { page, limit, skip, sortBy, sortOrder } = paginationHandler(paginationOptions);
 const { searchTerm, ...filterData } = searchQuery;
@@ -47,7 +47,7 @@ const andConditions: any = [];
 if (searchTerm) {
 andConditions.push({
   $or: searchFields.map((field) => ({
-    [field]: { $regex: searchTerm, $options: "i" },
+    [field]: { $regex: searchTerm },
   })),
 });
 }
