@@ -5,7 +5,9 @@ import AsyncHandler from "../../../Shared/AsyncHandler";
 import { verifyToken } from "../../../Shared/JwtHandler";
 import ResponseHandler from "../../../Shared/ResponseHandler";
 import { TBook } from "./book.interfaces";
-import { createBookService, deleteBookByIdService, getAllBooksService, getBookByIdService, updateBookReview, updateBookService } from "./book.services";
+import { createBookService, deleteBookByIdService, getAllBooksService, getBookByIdService, getTenBooksService, updateBookReview, updateBookService } from "./book.services";
+import PaginationQueryHandler from "../../../Shared/paginationQueryHandler";
+import { bookFilterFields, paginationFields } from "../../../Constants/pagination.query@types";
 
 
 export const createBook = AsyncHandler(async (req, res, next) => {
@@ -30,17 +32,27 @@ export const createBook = AsyncHandler(async (req, res, next) => {
 })
 
 export const getAllBooks = AsyncHandler(async (req, res, next) => {
-    const result = await getAllBooksService();
+    const token = req.headers.authorization as string;
+    const verifiedToken = verifyToken(token, Config.jwt.secret as string);
+    if (!verifiedToken) {
+        return next(
+            new ApiErrorHandler(false, httpStatus.UNAUTHORIZED, "Token not found 💥")
+        );
+    }
+    const searchQuery =  PaginationQueryHandler(req.query, bookFilterFields);
+    const paginationOptions = PaginationQueryHandler(req.query, paginationFields);
+    const result = await getAllBooksService(searchQuery, paginationOptions);
     ResponseHandler<TBook[]>(res, {
         statusCode: 200,
         success: true,
         message: "Books fetched successfully 🎉",
-        data: result,
+        meta: result.meta,
+        data: result.data,
     })
 })
 
 export const getTenBooks = AsyncHandler(async (req, res, next) => {
-    const result = await getAllBooksService();
+    const result = await getTenBooksService();
     ResponseHandler<TBook[]>(res, {
         statusCode: 200,
         success: true,
@@ -94,7 +106,7 @@ export const postReview = AsyncHandler(async (req, res, next) => {
     const { id } = req.params;
     const payload = req.body;
     const result = await updateBookReview(id, payload);
-    ResponseHandler<TBook>(res, {
+    ResponseHandler(res, {
         statusCode: 200,
         success: true,
         message: "Books Review successfully 🎉 posted",

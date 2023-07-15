@@ -27,18 +27,21 @@ const bookSchema = new Schema<TBook>(
       ref: "User",
       required: true,
     },
-    reviews: {
+    reviews:{
       type: [
         {
           user: {
             type: Schema.Types.ObjectId,
             ref: "User",
+            required: true,
           },
           comment: {
             type: String,
+            required: true,
           },
         },
       ],
+      required: true,
     },
     imgUrl: {
         type: String,

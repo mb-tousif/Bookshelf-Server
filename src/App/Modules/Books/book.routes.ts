@@ -4,7 +4,7 @@ const router = express.Router();
 
 // router.get('/users', getAllUsers);
 router.post('/create-book', createBook)
-router.post('/book-review/:id', postReview)
+router.patch('/book-review/:id', postReview)
 router.get('/get-ten-books', getTenBooks)
 router.get('/get-all-books', getAllBooks)
 router.get('/book/:id', getBookById);

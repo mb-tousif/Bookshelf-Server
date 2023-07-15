@@ -2,8 +2,10 @@ import httpStatus from "http-status";
 import ApiErrorHandler from "../../../Handlers/ApiError.handler";
 import { TBook, TReview } from "./book.interfaces";
 import { Book } from "./book.model";
-import mongoose from "mongoose";
+import mongoose, { SortOrder } from "mongoose";
 import { User } from "../Users/user.model";
+import { IPagination, IQueryResponse, TSearchedBook, bookSearchFields } from "../../../Constants/pagination.query@types";
+import { paginationHandler } from "../../../Shared/paginationHandler";
 
 export const createBookService = async (book: TBook) => {
     const user = book.savedBy;
@@ -34,16 +36,52 @@ export const getTenBooksService = async () => {
     return books;
 }
 
-export const getAllBooksService = async () => {
-    const books = await Book.find().sort({ createdAt: -1 })
-    if (!books) {
-        throw new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Books not found 💥")
-    }
-    return books;
+export const getAllBooksService = async (
+  paginationOptions: IPagination,
+  searchQuery: TSearchedBook
+): Promise<IQueryResponse<TBook[]>> => { 
+  const { page, limit, skip, sortBy, sortOrder } = paginationHandler(paginationOptions);
+const { searchTerm, ...filterData } = searchQuery;
+const searchFields = bookSearchFields;
+const andConditions: any = [];
+if (searchTerm) {
+andConditions.push({
+  $or: searchFields.map((field) => ({
+    [field]: { $regex: searchTerm, $options: "i" },
+  })),
+});
+}
+if (Object.keys(filterData).length) {
+andConditions.push({
+  $and: Object.entries(filterData).map(([field, value]) => ({
+    [field]: value,
+  })),
+});
+}
+const sortedCondition: { [key: string]: SortOrder } = {};
+if (sortBy && sortOrder) {
+sortedCondition[sortBy] = sortOrder;
+}
+
+const noQuery = andConditions.length > 0 ? { $and: andConditions } : {};
+const result = await Book.find(noQuery)
+.sort(sortedCondition)
+.skip(skip)
+.limit(limit)
+.lean();
+const totalPages = Math.ceil((await Book.countDocuments().lean()) / limit);
+return {
+meta: {
+  page,
+  limit,
+  total: totalPages,
+},
+data: result,
+};
 }
 
 export const getBookByIdService = async (id: string) => {
-  const book = await Book.findById(id)
+  const book = await Book.findOne({_id: id})
   if (!book) {
     throw new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Book not found 💥")
   }
@@ -60,16 +98,13 @@ export const deleteBookByIdService = async (id: string) => {
   return result;
 };
 
-export const updateBookReview = async (id: string, payload: TReview ) => {
-  const book = await Book.findById({ _id: id});
+export const updateBookReview = async (id: string, payload:TReview ) => {
+  const book = await Book.updateOne({ _id: id}, { $push: { reviews: payload } }, { new: true });
+  // const book = await Book.findOne({ _id: id});
   if (!book) {
     throw new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Book not found 💥")
   }
-  const review:TReview = {
-    user: payload.user,
-    comment: payload.comment
-  }
-  book.reviews.push = review as any;
-  const updatedBook = await book.save();
-  return updatedBook;
+  // book.reviews.push(payload);
+  // const updatedBook = await book.save();
+  return book;
 }
