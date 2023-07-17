@@ -75,3 +75,9 @@ export const getUserProfileService = async (token: string) => {
   const result = await User.findOne({ _id });
   return result;
 };
+
+export const getAllUsersService = async () => {
+  const result = await User.find().select("-password");
+  // const result = await User.find().select("-password").populate("books");
+  return result;
+}

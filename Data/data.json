@@ -1,0 +1,103 @@
+[
+    {
+        "title": "Learn JavaScript Quickly",
+        "author": "Code Quickly",
+        "genre": "Programming Book",
+        "publicationYear": 2020,
+        "reviews": {
+            "comment": "This is a great JavaScript!"
+        },
+        "imgUrl": "https://m.media-amazon.com/images/I/61HUuiDH+0L._SY522_.jpg"
+    },
+    {
+        "title": "Central Park West",
+        "author": "James Comey",
+        "genre": "Crime Novel",
+        "publicationYear": 2023,
+        "reviews": {
+            "comment": "This is a great Crime Novel"
+        },
+        "imgUrl": "https://m.media-amazon.com/images/I/81jyX97UdSL._SY522_.jpg"
+    },
+    {
+        "title": "Mastering TypeScript",
+        "author": "Nathan Rozentals",
+        "genre": "Programming Book",
+        "publicationYear": 2021,
+        "reviews": {
+            "comment": "This is a great TypeScript!"
+        },
+        "imgUrl":"https://m.media-amazon.com/images/I/714CM4h4kjS.jpg"
+    },
+    {
+        "title": "The Journey of Humanity",
+        "author": "Oded Galor",
+        "genre": "Economics book",
+        "publicationYear": 2022,
+        "reviews": {
+            "comment": "Best Economics book"
+        },
+        "imgUrl": "https://fivebooks.com/app/uploads/books/a/c6/BC_0593185994.jpg"
+    },
+    {
+        "title": "The Journey of Humanity",
+        "author": "Oded Galor",
+        "genre": "Economics book",
+        "publicationYear": 2022,
+        "reviews": {
+            "comment": "Best Economics book"
+        },
+        "imgUrl": "https://fivebooks.com/app/uploads/books/a/c6/BC_0593185994.jpg"
+    },
+    {
+        "title": "The Big Sleep",
+        "author": "Raymond Chandler",
+        "genre": "Mystery Novel",
+        "publicationYear": 1988,
+        "reviews": {
+            "comment": "Best mystery novel"
+        },
+        "imgUrl": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371584712l/2052.jpg"
+    },
+    {
+        "title": "Chip War",
+        "author": "Chris Miller",
+        "genre": "Economics book",
+        "publicationYear": 2022,
+        "reviews": {
+            "comment": "Best Economics book in 2022"
+        },
+        "imgUrl": "https://fivebooks.com/app/uploads/2022/10/81k-FqQ-6NL-999x1536.jpg"
+    },
+    {
+        "title": "Witchcraft",
+        "author": "Marion Gibson",
+        "genre": "History Novel",
+        "publicationYear": 2023,
+        "reviews": {
+            "comment": "Considered the best History novel ever written"
+        },
+        "description": "Witchcraft: A History in Thirteen",
+        "imgUrl": "https://fivebooks.com/app/uploads/books/6/bd/BC_1668002426.jpg"
+    },
+    {
+        "title": "And Then There Were None",
+        "author": "Agatha Christie",
+        "genre": "Mystery Novels",
+        "publicationYear": 2009,
+        "reviews": {
+                "comment": "Considered the best mystery novel ever written"
+            },
+        "imgUrl": "https://m.media-amazon.com/images/I/41l02vDN4pL.jpg"
+    },
+    {
+        "title": "Things We Never Got Over",
+        "author": "Lucy Score",
+        "genre": "Romantic Novel",
+        "publicationYear": 2022,
+        "reviews": {
+            "comment": "Best romantic novel"
+        },
+        "imgUrl": "https://m.media-amazon.com/images/I/419Q1FpTrzL._SY445_SX342_.jpg"
+    }
+]

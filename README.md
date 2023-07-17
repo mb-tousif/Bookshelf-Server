@@ -7,8 +7,9 @@
 
 ### User
 
-- `https://bookshelf-server.vercel.app/api/v1/users/login` (POST)
+- `https://bookshelf-server.vercel.app/api/v1/users/allUsers` (GET)
 - `https://bookshelf-server.vercel.app/api/v1/users/create-user` (POST)
+- `https://bookshelf-server.vercel.app/api/v1/users/login` (POST)
 - `https://bookshelf-server.vercel.app/api/v1/users/update-user` (POST)
 
 ### Books

@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 import ApiErrorHandler from "../../../Handlers/ApiError.handler";
-import { TBook, TReview } from "./book.interfaces";
+import { TBook} from "./book.interfaces";
 import { Book } from "./book.model";
 import mongoose, { SortOrder } from "mongoose";
 import { User } from "../Users/user.model";
@@ -9,11 +9,11 @@ import { paginationHandler } from "../../../Shared/paginationHandler";
 
 export const createBookService = async (book: TBook) => {
     const user = book.savedBy;
-    const newBook = (await Book.create(book));
+    const newBook = (await Book.create(book))
     const session = await mongoose.startSession();
       try {
         session.startTransaction();
-        await User.findByIdAndUpdate(user, { books: newBook._id }, { session });
+        await User.findByIdAndUpdate(user, { $push: { books: newBook._id } }, { session });
         await session.commitTransaction();
         await session.endSession();
       } catch (error) {
@@ -25,7 +25,8 @@ export const createBookService = async (book: TBook) => {
     if (!newBook) {
         throw new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Book not created 💥")
     }
-    return newBook;
+    return newBook.populate("savedBy");
+    // return newBook.populate
 }
 
 export const getTenBooksService = async () => {
@@ -93,18 +94,30 @@ export const updateBookService = async (id: string, bookInfo:Partial<TBook>) => 
   return updateBook;
 }
 
-export const deleteBookByIdService = async (id: string) => {
-  const result = await Book.findOne({ _id: id });
+export const deleteBookByIdService = async (_id:string ,bookId: string) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    await User.findByIdAndUpdate(_id, { $pull: { books: { $in: [ bookId ] } } }, { session });
+    await session.commitTransaction();
+    await session.endSession();
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw error;
+  }
+  const result = await Book.deleteOne({ _id: bookId });
   return result;
 };
 
+type TReview = {
+  comment: string;
+}
+
 export const updateBookReview = async (id: string, payload:TReview ) => {
-  const book = await Book.updateOne({ _id: id}, { $push: { reviews: payload } }, { new: true });
-  // const book = await Book.findOne({ _id: id});
+  const book = await Book.findOneAndUpdate({ _id: id}, { $push: { reviews: payload } }, { new: true });
   if (!book) {
     throw new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Book not found 💥")
   }
-  // book.reviews.push(payload);
-  // const updatedBook = await book.save();
   return book;
 }

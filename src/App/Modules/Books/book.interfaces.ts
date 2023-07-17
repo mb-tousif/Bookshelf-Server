@@ -7,12 +7,9 @@ export type TBook = {
   genre: string;
   publicationYear: number;
   savedBy: Schema.Types.ObjectId;
-  reviews: TReview [];
+  reviews: {
+    comment: string;
+  };
   imgUrl?: string;
   description?: string;
 };
-
-export type TReview= {
-  user: string;
-  comment: string;
-}

@@ -27,22 +27,12 @@ const bookSchema = new Schema<TBook>(
       ref: "User",
       required: true,
     },
-    reviews:{
-      type: [
-        {
-          user: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-          },
+    reviews:[{
           comment: {
             type: String,
             required: true,
           },
-        },
-      ],
-      required: true,
-    },
+        }],
     imgUrl: {
         type: String,
         default: "https://via.placeholder.com/300",

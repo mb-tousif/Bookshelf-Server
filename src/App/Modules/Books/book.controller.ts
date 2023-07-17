@@ -8,6 +8,7 @@ import { TBook } from "./book.interfaces";
 import { createBookService, deleteBookByIdService, getAllBooksService, getBookByIdService, getTenBooksService, updateBookReview, updateBookService } from "./book.services";
 import PaginationQueryHandler from "../../../Shared/paginationQueryHandler";
 import { bookFilterFields, paginationFields } from "../../../Constants/pagination.query@types";
+import { Book } from "./book.model";
 
 
 export const createBook = AsyncHandler(async (req, res, next) => {
@@ -21,7 +22,7 @@ export const createBook = AsyncHandler(async (req, res, next) => {
     }
     const { _id } = verifiedToken;
     bookInfo.savedBy = _id;
-    const result = await createBookService( bookInfo);
+    const result = await createBookService( bookInfo)
     
     ResponseHandler<TBook>(res, {
         statusCode: 201,
@@ -105,11 +106,11 @@ export const postReview = AsyncHandler(async (req, res, next) => {
         }
     const { id } = req.params;
     const payload = req.body;
-    const result = await updateBookReview(id, payload);
+    const result = (await updateBookReview(id, payload))
     ResponseHandler(res, {
         statusCode: 200,
         success: true,
-        message: "Books Review successfully 🎉 posted",
+        message: "Book Review successfully 🎉 posted",
         data: result,
     })
 });
@@ -121,14 +122,21 @@ export const deleteBook = AsyncHandler( async (req, res, next) => {
             new ApiErrorHandler(false, httpStatus.UNAUTHORIZED, "Token not found 💥")
             );
         }
-    const id = req.params.id;
-    const result = await deleteBookByIdService(id);
+    const { _id}= verifiedToken;
+    const canDelete = await Book.findOne({ savedBy: _id });
+    if (!canDelete) {
+        return next(
+            new ApiErrorHandler(false, httpStatus.UNAUTHORIZED, "You are not authorized to delete this book 💥")
+            );
+        }
+    const bookId = req.params.id;
+    const result = await deleteBookByIdService(_id, bookId);
     if (!result) {
       return next(
         new ApiErrorHandler(false, httpStatus.NOT_FOUND, "Book not found 💥")
       );
     }
-    ResponseHandler<TBook>(res, {
+    ResponseHandler(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Book deleted successfully 🎉",

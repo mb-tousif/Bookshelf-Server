@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import AsyncHandler from "../../../Shared/AsyncHandler";
 import {
   createUserService,
+  getAllUsersService,
   loginService,
   updateUserByTokenService,
 } from "./user.services";
@@ -73,3 +74,21 @@ export const updateUserByToken: RequestHandler = AsyncHandler(
     });
   }
 );
+
+export const getAllUsers = AsyncHandler (async (req, res, next) => {
+  const token = req.headers.authorization as string;
+  const verifiedToken = verifyToken(token, Config.jwt.secret as string);
+  if (!verifiedToken) {
+    return next(
+      new ApiErrorHandler(false, httpStatus.BAD_REQUEST, "Token not found 💥")
+    );
+  };
+  const result = await getAllUsersService();
+  ResponseHandler<TUser[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users fetched successfully 🎉",
+    data: result,
+  });
+}
+)
