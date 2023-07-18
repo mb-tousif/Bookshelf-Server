@@ -49,6 +49,7 @@ if (searchTerm) {
 andConditions.push({
   $or: searchFields.map((field) => ({
     [field]: { $regex: searchTerm },
+    $options: 'i',
   })),
 });
 }
@@ -56,6 +57,7 @@ if (Object.keys(filterData).length) {
 andConditions.push({
   $and: Object.entries(filterData).map(([field, value]) => ({
     [field]: value,
+    $options: 'i',
   })),
 });
 }
