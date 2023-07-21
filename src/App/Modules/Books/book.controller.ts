@@ -33,6 +33,18 @@ export const createBook = AsyncHandler(async (req, res, next) => {
 })
 
 export const getAllBooks = AsyncHandler(async (req, res, next) => {
+    const isYearExist = req.query.publicationYear;
+    const isGenreExist = req.query.genre;
+    const isSearchTermExist = req.query.searchTerm;
+    if (!isYearExist) {
+      delete req.query.year;
+    }
+    if (!isGenreExist) {
+      delete req.query.genre;
+    }
+    if (!isSearchTermExist) {
+      delete req.query.searchTerm;
+    }
     const token = req.headers.authorization as string;
     const verifiedToken = verifyToken(token, Config.jwt.secret as string);
     if (!verifiedToken) {

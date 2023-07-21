@@ -8,6 +8,7 @@ export type TBook = {
   publicationYear: number;
   savedBy: Schema.Types.ObjectId;
   reviews: {
+    push(payload: { comment: string; }): unknown;
     comment: string;
   };
   imgUrl?: string;
