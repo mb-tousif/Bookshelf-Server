@@ -15,7 +15,7 @@
 ### Books
 
 - `https://bookshelf-server.vercel.app/api/v1/books/create-book` (POST)
-- `https://bookshelf-server.vercel.app/api/v1/books/book-review/:id` (POST)
+- `https://bookshelf-server.vercel.app/api/v1/books/book-review/:id` (PATCH)
 - `https://bookshelf-server.vercel.app/api/v1/books/get-ten-books` (GET Ten books)
 - `https://bookshelf-server.vercel.app/api/v1/books/get-all-books` (GET All books)
 - `https://bookshelf-server.vercel.app/api/v1/books/book/:id` ( GET Single Book Data)

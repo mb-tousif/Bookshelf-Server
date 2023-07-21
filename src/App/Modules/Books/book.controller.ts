@@ -37,7 +37,7 @@ export const getAllBooks = AsyncHandler(async (req, res, next) => {
     const isGenreExist = req.query.genre;
     const isSearchTermExist = req.query.searchTerm;
     if (!isYearExist) {
-      delete req.query.year;
+      delete req.query.publicationYear;
     }
     if (!isGenreExist) {
       delete req.query.genre;
