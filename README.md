@@ -4,7 +4,6 @@
 
 ## Application Routes:
 
-
 ### User
 
 - `https://bookshelf-server.vercel.app/api/v1/users/allUsers` (GET)
